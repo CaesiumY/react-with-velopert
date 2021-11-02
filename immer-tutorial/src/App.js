@@ -10,18 +10,15 @@ function App() {
     uselessValue: false,
   });
 
-  const onChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
+  const onChange = useCallback((e) => {
+    const { name, value } = e.target;
 
-      setForm(
-        produce(form, (draft) => {
-          draft[name] = value;
-        }) // produce에 return 값이 있어서는 안 되므로 라인 하나로 작성하면 안 됨. {}로 묶어서 return 값을 주지 않으면 됨
-      );
-    },
-    [form]
-  );
+    setForm(
+      produce((draft) => {
+        draft[name] = value;
+      }) // produce에 return 값이 있어서는 안 되므로 라인 하나로 작성하면 안 됨. {}로 묶어서 return 값을 주지 않으면 됨
+    );
+  }, []);
 
   const onSubmit = useCallback(
     (e) => {
@@ -34,7 +31,7 @@ function App() {
       };
 
       setData(
-        produce(data, (draft) => {
+        produce((draft) => {
           draft.array.push(info);
         })
       );
@@ -46,22 +43,19 @@ function App() {
 
       nextId.current += 1;
     },
-    [data, form.name, form.username]
+    [form.name, form.username]
   );
 
-  const onRemove = useCallback(
-    (id) => {
-      setData(
-        produce(data, (draft) => {
-          draft.array.splice(
-            draft.array.findIndex((info) => info.id === id),
-            1
-          );
-        })
-      );
-    },
-    [data]
-  );
+  const onRemove = useCallback((id) => {
+    setData(
+      produce((draft) => {
+        draft.array.splice(
+          draft.array.findIndex((info) => info.id === id),
+          1
+        );
+      })
+    );
+  }, []);
 
   return (
     <div>
