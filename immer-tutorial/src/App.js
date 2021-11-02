@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
+import produce from "immer";
 import "./App.css";
 
 function App() {
@@ -13,10 +14,11 @@ function App() {
     (e) => {
       const { name, value } = e.target;
 
-      setForm({
-        ...form,
-        [name]: [value],
-      });
+      setForm(
+        produce(form, (draft) => {
+          draft[name] = value;
+        }) // produce에 return 값이 있어서는 안 되므로 라인 하나로 작성하면 안 됨. {}로 묶어서 return 값을 주지 않으면 됨
+      );
     },
     [form]
   );
@@ -31,10 +33,11 @@ function App() {
         username: form.username,
       };
 
-      setData({
-        ...data,
-        array: data.array.concat(info),
-      });
+      setData(
+        produce(data, (draft) => {
+          draft.array.push(info);
+        })
+      );
 
       setForm({
         name: "",
@@ -48,10 +51,14 @@ function App() {
 
   const onRemove = useCallback(
     (id) => {
-      setData({
-        ...data,
-        array: data.array.filter((info) => info.id !== id),
-      });
+      setData(
+        produce(data, (draft) => {
+          draft.array.splice(
+            draft.array.findIndex((info) => info.id === id),
+            1
+          );
+        })
+      );
     },
     [data]
   );
