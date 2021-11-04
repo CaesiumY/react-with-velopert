@@ -9,7 +9,7 @@ const NewsItemBlock = styled.div`
     img {
       display: block;
       width: 160px;
-      height: 100px;
+      height: 160px;
       object-fit: cover;
     }
   }
