@@ -1,13 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
+import { createLogger } from "redux-logger";
 
 import "./index.css";
 import App from "./App";
 import rootReducer from "./modules";
 
-const store = createStore(rootReducer);
+const logger = createLogger();
+
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(
   <React.StrictMode>
