@@ -1,22 +1,45 @@
 import { createAction, handleActions } from "redux-actions";
-import {} from "redux-thunk";
+import { delay, put, takeEvery, takeLatest } from "@redux-saga/core/effects";
 
-const INCREASE = "INCREASE";
-const DECREASE = "DECREASE";
+const INCREASE = "counter/INCREASE";
+const DECREASE = "counter/DECREASE";
+
+const INCREASE_ASYNC = "counter/INCREASE_ASYNC";
+const DECREASE_ASYNC = "counter/DECREASE_ASYNC";
 
 export const increase = createAction(INCREASE);
 export const decrease = createAction(DECREASE);
 
-export const increaseAsync = () => (dispatch) => {
-  setTimeout(() => {
-    dispatch(increase());
-  }, 1000);
-};
-export const decreaseAsync = () => (dispatch) => {
-  setTimeout(() => {
-    dispatch(decrease());
-  }, 1000);
-};
+export const increaseAsync = createAction(INCREASE_ASYNC, () => undefined); // 마우스 클릭 이벤트가 들어가지 않도록 패러미터를 없앰
+export const decreaseAsync = createAction(DECREASE_ASYNC, () => undefined);
+
+function* increaseSaga() {
+  yield delay(1000);
+  yield put(increase());
+}
+
+function* decreaseSaga() {
+  yield delay(1000);
+  yield put(decrease());
+}
+
+export function* counterSaga() {
+  yield takeEvery(INCREASE_ASYNC, increaseSaga);
+
+  yield takeLatest(DECREASE_ASYNC, decreaseSaga);
+}
+
+// NOTE: redux-thunk part
+// export const increaseAsync = () => (dispatch) => {
+//   setTimeout(() => {
+//     dispatch(increase());
+//   }, 1000);
+// };
+// export const decreaseAsync = () => (dispatch) => {
+//   setTimeout(() => {
+//     dispatch(decrease());
+//   }, 1000);
+// };
 
 const initialState = 0;
 
