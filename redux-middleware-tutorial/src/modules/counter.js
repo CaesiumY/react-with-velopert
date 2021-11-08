@@ -1,5 +1,11 @@
 import { createAction, handleActions } from "redux-actions";
-import { delay, put, takeEvery, takeLatest } from "@redux-saga/core/effects";
+import {
+  delay,
+  put,
+  throttle,
+  takeLatest,
+  select,
+} from "@redux-saga/core/effects";
 
 const INCREASE = "counter/INCREASE";
 const DECREASE = "counter/DECREASE";
@@ -16,6 +22,8 @@ export const decreaseAsync = createAction(DECREASE_ASYNC, () => undefined);
 function* increaseSaga() {
   yield delay(1000);
   yield put(increase());
+  const number = yield select((state) => state.counter); // 현재 상태 반환
+  console.log(number);
 }
 
 function* decreaseSaga() {
@@ -24,7 +32,7 @@ function* decreaseSaga() {
 }
 
 export function* counterSaga() {
-  yield takeEvery(INCREASE_ASYNC, increaseSaga);
+  yield throttle(3000, INCREASE_ASYNC, increaseSaga); // 쓰로틀링
 
   yield takeLatest(DECREASE_ASYNC, decreaseSaga);
 }
