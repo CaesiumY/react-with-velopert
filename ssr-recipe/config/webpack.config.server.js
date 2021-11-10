@@ -35,14 +35,14 @@ module.exports = {
               customize: require.resolve(
                 "babel-preset-react-app/webpack-overrides"
               ),
-              // presets: [
-              //     [
-              //       require.resolve('babel-preset-react-app'),
-              //       {
-              //         runtime: hasJsxRuntime ? 'automatic' : 'classic',
-              //       },
-              //     ],
-              //   ],
+              presets: [
+                [
+                  require.resolve("babel-preset-react-app"),
+                  {
+                    runtime: "automatic",
+                  },
+                ],
+              ],
               plugins: [
                 [
                   require.resolve("babel-plugin-named-asset-import"),
@@ -66,16 +66,21 @@ module.exports = {
             exclude: cssModuleRegex,
             loader: require.resolve("css-loader"),
             options: {
-              exportOnlyLocals: true,
+              importLoaders: 1,
+              modules: {
+                exportOnlyLocals: true,
+              },
             },
           },
           {
             test: cssModuleRegex,
             loader: require.resolve("css-loader"),
             options: {
-              modules: true,
-              exportOnlyLocals: true,
-              getLocalIdent: getCSSModuleLocalIdent,
+              importLoaders: 1,
+              modules: {
+                exportOnlyLocals: true,
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
             },
           },
           {
@@ -85,7 +90,10 @@ module.exports = {
               {
                 loader: require.resolve("css-loader"),
                 options: {
-                  exportOnlyLocals: true,
+                  importLoaders: 3,
+                  modules: {
+                    exportOnlyLocals: true,
+                  },
                 },
               },
               require.resolve("sass-loader"),
@@ -97,9 +105,11 @@ module.exports = {
               {
                 loader: require.resolve("css-loader"),
                 options: {
-                  modules: true,
-                  exportOnlyLocals: true,
-                  getLocalIdent: getCSSModuleLocalIdent,
+                  importLoaders: 3,
+                  modules: {
+                    exportOnlyLocals: true,
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
                 },
               },
               require.resolve("sass-loader"),
@@ -127,6 +137,7 @@ module.exports = {
   },
 
   resolve: {
+    extensions: [".jsx", ".js"],
     modules: ["node_modules"],
   },
   externals: [nodeExternals()],
