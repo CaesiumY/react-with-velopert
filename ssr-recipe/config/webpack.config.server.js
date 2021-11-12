@@ -140,6 +140,10 @@ module.exports = {
     extensions: [".jsx", ".js"],
     modules: ["node_modules"],
   },
-  externals: [nodeExternals()],
+  externals: [
+    nodeExternals({
+      allowlist: [/@babel/],
+    }),
+  ],
   plugins: [new webpack.DefinePlugin(env.stringified)],
 };
