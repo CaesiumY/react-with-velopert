@@ -4,16 +4,22 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
+
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import rootReducer from "./modules";
+import rootReducer, { rootSaga } from "./modules";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
   window.__PRELOADED_STATE__,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, sagaMiddleware)
 );
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <React.StrictMode>
