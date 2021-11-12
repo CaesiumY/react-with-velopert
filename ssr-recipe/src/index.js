@@ -11,7 +11,7 @@ import rootReducer from "./modules";
 
 const store = createStore(
   rootReducer,
-  window.__PRELOAD_STATE__,
+  window.__PRELOADED_STATE__,
   applyMiddleware(thunk)
 );
 

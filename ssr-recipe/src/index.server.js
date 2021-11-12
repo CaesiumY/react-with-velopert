@@ -79,7 +79,7 @@ const serverRender = async (req, res, next) => {
 
   const root = ReactDOMServer.renderToString(jsx);
   const stateString = JSON.stringify(store.getState()).replace(/</g, "\\u003c");
-  const stateScript = `<script>__PRELOAD_STATE__=${stateString}</script>`;
+  const stateScript = `<script>__PRELOADED_STATE__=${stateString}</script>`;
   res.send(createPage(root, stateScript));
 };
 
