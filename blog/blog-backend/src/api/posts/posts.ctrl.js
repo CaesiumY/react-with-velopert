@@ -9,7 +9,7 @@ const posts = [
 ];
 
 // ANCHOR - 포스트 작성
-exports.write = (ctx) => {
+export const write = (ctx) => {
   const { title, body } = ctx.request.body;
 
   postId += 1;
@@ -24,12 +24,12 @@ exports.write = (ctx) => {
 };
 
 // ANCHOR - 포스트 목록 조회
-exports.list = (ctx) => {
+export const list = (ctx) => {
   ctx.body = posts;
 };
 
 // ANCHOR - 특정 포스트 조회
-exports.read = (ctx) => {
+export const read = (ctx) => {
   const { id } = ctx.params;
 
   const post = posts.find((post) => post.id.toString() === id);
@@ -46,7 +46,7 @@ exports.read = (ctx) => {
 };
 
 // ANCHOR - 특정 포스트 삭제
-exports.remove = (ctx) => {
+export const remove = (ctx) => {
   const { id } = ctx.params;
 
   const index = posts.findIndex((post) => post.id.toString() === id);
@@ -64,7 +64,7 @@ exports.remove = (ctx) => {
 };
 
 // ANCHOR - 특정 포스트 교체
-exports.replace = (ctx) => {
+export const replace = (ctx) => {
   const { id } = ctx.params;
 
   const index = posts.findIndex((post) => post.id.toString() === id);
@@ -85,7 +85,7 @@ exports.replace = (ctx) => {
 };
 
 // ANCHOR - 특정 포스트 수정
-exports.update = (ctx) => {
+export const update = (ctx) => {
   const { id } = ctx.params;
 
   const index = posts.findIndex((post) => post.id.toString() === id);
