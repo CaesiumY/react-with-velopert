@@ -1,106 +1,78 @@
-let postId = 1;
+import Post from '../../models/post';
 
-const posts = [
-  {
-    id: 1,
-    title: '제목',
-    body: '내용',
-  },
-];
+/* ANCHOR - sample post object
+{
+  title: String,
+  body: String,
+  tages: [String]
+}
+*/
 
-// ANCHOR - 포스트 작성
-export const write = (ctx) => {
-  const { title, body } = ctx.request.body;
+export const write = async (ctx) => {
+  const { title, body, tags } = ctx.request.body;
 
-  postId += 1;
-  const post = {
-    id: postId,
+  const post = new Post({
     title,
     body,
-  };
+    tags,
+  });
 
-  posts.push(post);
-  ctx.body = post;
+  try {
+    await post.save();
+    ctx.body = post;
+  } catch (error) {
+    ctx.throw(500, error);
+  }
 };
-
-// ANCHOR - 포스트 목록 조회
-export const list = (ctx) => {
-  ctx.body = posts;
+export const list = async (ctx) => {
+  try {
+    const posts = await Post.find().exec();
+    ctx.body = posts;
+  } catch (error) {
+    ctx.throw(500, error);
+  }
 };
-
-// ANCHOR - 특정 포스트 조회
-export const read = (ctx) => {
+export const read = async (ctx) => {
   const { id } = ctx.params;
 
-  const post = posts.find((post) => post.id.toString() === id);
+  try {
+    const post = await Post.findById(id).exec();
 
-  if (!post) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 포스트입니다.',
-    };
-    return;
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+
+    ctx.body = post;
+  } catch (error) {
+    ctx.throw(500, error);
   }
-
-  ctx.body = post;
 };
-
-// ANCHOR - 특정 포스트 삭제
-export const remove = (ctx) => {
+export const remove = async (ctx) => {
   const { id } = ctx.params;
 
-  const index = posts.findIndex((post) => post.id.toString() === id);
-
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 포스트입니다.',
-    };
-    return;
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.status = 204;
+  } catch (error) {
+    ctx.throw(500, error);
   }
-
-  posts.splice(index, 1);
-  ctx.status = 204;
 };
-
-// ANCHOR - 특정 포스트 교체
-export const replace = (ctx) => {
+export const update = async (ctx) => {
   const { id } = ctx.params;
 
-  const index = posts.findIndex((post) => post.id.toString() === id);
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true,
+    }).exec();
 
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 포스트입니다.',
-    };
-    return;
+    if (!post) {
+      ctx.statux = 404;
+      return;
+    }
+
+    ctx.body = post;
+  } catch (error) {
+    ctx.throw(500, error);
   }
-
-  posts[index] = {
-    id,
-    ...ctx.request.body,
-  };
-  ctx.body = posts[index];
-};
-
-// ANCHOR - 특정 포스트 수정
-export const update = (ctx) => {
-  const { id } = ctx.params;
-
-  const index = posts.findIndex((post) => post.id.toString() === id);
-
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '존재하지 않는 포스트입니다.',
-    };
-    return;
-  }
-
-  posts[index] = {
-    ...posts[index],
-    ...ctx.request.body,
-  };
-  ctx.body = posts[index];
 };
