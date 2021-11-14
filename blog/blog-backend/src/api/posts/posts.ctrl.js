@@ -16,7 +16,6 @@ export const getPostById = async (ctx, next) => {
     const post = await Post.findById(id).exec();
 
     if (!post) {
-      console.log(post);
       ctx.status = 404;
       return;
     }
@@ -31,7 +30,7 @@ export const getPostById = async (ctx, next) => {
 export const checkOwnPost = (ctx, next) => {
   const { user, post } = ctx.state;
 
-  if (post.user._id.toString !== user._id) {
+  if (post.user._id.toString() !== user._id) {
     ctx.status = 403;
     return;
   }
