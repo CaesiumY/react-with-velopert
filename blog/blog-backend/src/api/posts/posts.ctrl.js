@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Joi from 'joi';
 import Post from '../../models/post';
 
 const { ObjectId } = mongoose.Types;
@@ -23,6 +24,20 @@ export const checkObjectIdValid = (ctx, next) => {
 */
 
 export const write = async (ctx) => {
+  const schema = Joi.object().keys({
+    title: Joi.string().required(),
+    body: Joi.string().required(),
+    tags: Joi.array().items(Joi.string()).required(),
+  });
+
+  const result = schema.validate(ctx.request.body);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
   const { title, body, tags } = ctx.request.body;
 
   const post = new Post({
@@ -38,6 +53,7 @@ export const write = async (ctx) => {
     ctx.throw(500, error);
   }
 };
+
 export const list = async (ctx) => {
   try {
     const posts = await Post.find().exec();
@@ -46,6 +62,7 @@ export const list = async (ctx) => {
     ctx.throw(500, error);
   }
 };
+
 export const read = async (ctx) => {
   const { id } = ctx.params;
 
@@ -62,6 +79,7 @@ export const read = async (ctx) => {
     ctx.throw(500, error);
   }
 };
+
 export const remove = async (ctx) => {
   const { id } = ctx.params;
 
@@ -72,8 +90,23 @@ export const remove = async (ctx) => {
     ctx.throw(500, error);
   }
 };
+
 export const update = async (ctx) => {
   const { id } = ctx.params;
+
+  const schema = Joi.object().keys({
+    title: Joi.string(),
+    body: Joi.string(),
+    tags: Joi.array().items(Joi.string()),
+  });
+
+  const result = schema.validate(ctx.request.body);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
 
   try {
     const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
