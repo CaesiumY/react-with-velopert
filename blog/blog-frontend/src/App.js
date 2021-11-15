@@ -9,7 +9,8 @@ import WritePage from './pages/WritePage';
 const App = () => {
   return (
     <Routes>
-      <Route path={['/@:username', '/']} element={<PostListPage />} />
+      <Route path="/" element={<PostListPage />} />
+      <Route path="/@:username" element={<PostListPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/write" element={<WritePage />} />
