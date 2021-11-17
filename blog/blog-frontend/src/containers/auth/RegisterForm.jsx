@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import AuthForm from '../../components/auth/AuthForm';
 import { changeField, initializeForm } from '../../modules/auth';
 
-const KEY = 'login';
+const KEY = 'register';
 
-const LoginForm = () => {
-  const { form } = useSelector(({ auth }) => ({
-    form: auth[KEY],
-  }));
+const RegisterForm = () => {
+  const { form } = useSelector(({ auth }) => ({ form: auth.register }));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,8 +31,8 @@ const LoginForm = () => {
   };
 
   return (
-    <AuthForm type={KEY} form={form} onChange={onChange} onSubmit={onSubmit} />
+    <AuthForm type={KEY} form={form} onSubmit={onSubmit} onChange={onChange} />
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
