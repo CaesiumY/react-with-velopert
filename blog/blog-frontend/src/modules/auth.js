@@ -4,7 +4,7 @@ import { takeLatest } from 'redux-saga/effects';
 
 import createRequestSaga, {
   createRequestActionSaga,
-} from '../lib/createRequestSags';
+} from '../lib/createRequestSaga';
 import * as authAPI from '../lib/api/auth';
 
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
@@ -33,8 +33,8 @@ export const login = createAction(LOGIN, ({ username, password }) => ({
 }));
 
 // ANCHOR - saga section
-export const registerSaga = createRequestSaga(REGISTER, authAPI.register);
-export const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const registerSaga = createRequestSaga(REGISTER, authAPI.register);
+const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 
 export function* authSaga() {
   yield takeLatest(REGISTER, registerSaga);
