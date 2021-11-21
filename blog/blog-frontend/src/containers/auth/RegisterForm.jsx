@@ -6,6 +6,7 @@ import { changeField, initializeForm, register } from '../../modules/auth';
 import { check } from '../../modules/user';
 
 const KEY = 'register';
+const LOCALSTORAGE_KEY = 'user';
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
@@ -52,6 +53,12 @@ const RegisterForm = () => {
   useEffect(() => {
     if (user) {
       navigate('/');
+      try {
+        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(user));
+      } catch (error) {
+        console.log('LocalStorage is not working!');
+        console.error(error);
+      }
     }
   }, [user, navigate]);
 

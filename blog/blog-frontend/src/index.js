@@ -11,6 +11,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import rootReducer from './modules';
 import { rootSaga } from './modules/index';
+import { check, tempSetUser } from './modules/user';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -19,7 +20,22 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(sagaMiddleware)),
 );
 
+const loadUser = () => {
+  try {
+    const user = localStorage.getItem('user');
+
+    if (!user) return;
+
+    store.dispatch(tempSetUser(user));
+    store.dispatch(check());
+  } catch (error) {
+    console.log("Can't get user from localstorage");
+    console.error(error);
+  }
+};
+
 sagaMiddleware.run(rootSaga);
+loadUser();
 
 ReactDOM.render(
   <React.StrictMode>
