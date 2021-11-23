@@ -26,7 +26,7 @@ const loadUser = () => {
 
     if (!user) return;
 
-    store.dispatch(tempSetUser(user));
+    store.dispatch(tempSetUser(JSON.parse(user)));
     store.dispatch(check());
   } catch (error) {
     console.log("Can't get user from localstorage");
