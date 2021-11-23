@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Button from '../common/Button';
@@ -43,30 +44,46 @@ const PostItemBlock = styled.div`
   }
 `;
 
-const PostItem = () => {
+const PostItem = ({ post }) => {
+  const { title, body, _id, tags, publishedDate, user } = post;
+
   return (
     <PostItemBlock>
-      <h2>제목</h2>
-      <SubInfo username="username" publishedDate={new Date()} />
-      <Tags tags={['tag1', 'tag22']} />
-      <p>포스트 내용 일부분 = excerpt</p>
+      <h2>
+        <Link to={`/@${user.username}/${_id}`}>{title}</Link>
+      </h2>
+      <SubInfo
+        username={user.username}
+        publishedDate={new Date(publishedDate)}
+      />
+      <Tags tags={tags} />
+      <p>{body}</p>
     </PostItemBlock>
   );
 };
 
-const PostList = () => {
+const PostList = ({ posts, error, loading, showWriteButton }) => {
+  if (error) {
+    return <PostListBlock>오류 발생!</PostListBlock>;
+  }
+
   return (
     <PostListBlock>
-      <WritePostButtonWrapper>
-        <Button cyan to="/write">
-          새 글 작성하기
-        </Button>
-      </WritePostButtonWrapper>
-      <div>
-        <PostItem />
-        <PostItem />
-        <PostItem />
-      </div>
+      {showWriteButton && (
+        <WritePostButtonWrapper>
+          <Button cyan to="/write">
+            새 글 작성하기
+          </Button>
+        </WritePostButtonWrapper>
+      )}
+
+      {!loading && posts && (
+        <div>
+          {posts.map((post) => (
+            <PostItem key={post._id} post={post} />
+          ))}
+        </div>
+      )}
     </PostListBlock>
   );
 };
