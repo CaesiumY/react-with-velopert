@@ -3,7 +3,7 @@ import createRequestSaga, {
   createRequestActionSaga,
 } from '../lib/createRequestSaga';
 import { takeLatest } from 'redux-saga/effects';
-import * as postAPI from '../lib/api/write';
+import * as postAPI from '../lib/api/posts';
 
 const INITIALIZE = 'write/INITIALIZE';
 const CHANGE_FIELD = 'write/CHANGE_FIELD';
