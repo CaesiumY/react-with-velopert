@@ -28,11 +28,12 @@ const PostViewerContainer = () => {
   }, [dispatch, postId]);
 
   const onEdit = () => {
+    console.log(post);
     dispatch(setOriginalPost(post));
     navigate('/write');
   };
 
-  const ownPost = () => user?._id === post?.user._id;
+  const ownPost = user?._id === post?.user._id;
 
   return (
     <PostViewer
