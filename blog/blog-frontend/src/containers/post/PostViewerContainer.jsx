@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import PostActionButton from '../../components/post/PostActionButton';
 import PostViewer from '../../components/post/PostViewer';
 import { readPost, unloadPost } from '../../modules/post';
 
@@ -21,7 +22,14 @@ const PostViewerContainer = () => {
     };
   }, [dispatch, postId]);
 
-  return <PostViewer post={post} error={error} loading={loading} />;
+  return (
+    <PostViewer
+      post={post}
+      error={error}
+      loading={loading}
+      actionButtons={<PostActionButton />}
+    />
+  );
 };
 
 export default PostViewerContainer;
